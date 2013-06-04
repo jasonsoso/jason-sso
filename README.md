@@ -2,7 +2,7 @@
 CAS server
 
 
-## Quick start & test ##  
+## Quick start & test ##
 To start quickly, build the project,start this application with jetty:  
 
 `git clone https://github.com/jasonsoso/jason-sso.git`   
