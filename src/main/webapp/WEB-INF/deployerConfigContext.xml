@@ -125,10 +125,11 @@
 					| local authentication strategy.  You might accomplish this by coding a new such handler and declaring
 					| edu.someschool.its.cas.MySpecialHandler here, or you might use one of the handlers provided in the adaptors modules.
 					+-->
-				<!-- <bean 
+				<!--  账号密码一致的 认证
+				<bean 
 					class="org.jasig.cas.authentication.handler.support.SimpleTestUsernamePasswordAuthenticationHandler" />
-									 -->
-					<!-- jdbc 账号密码查询 -->
+				-->
+					<!-- jdbc 数据源进行用户认证 -->
 					<bean id="SearchModeSearchDatabaseAuthenticationHandler"
 						class="org.jasig.cas.adaptors.jdbc.SearchModeSearchDatabaseAuthenticationHandler"
 						abstract="false" lazy-init="default" autowire="default">
@@ -232,7 +233,7 @@
       </list>
     </property>
   </bean>
-    <!-- 密码加密方式 -->
+    <!-- 密码加密方式 MD5-->
     <bean id="passwordEncoder" class="org.jasig.cas.authentication.handler.DefaultPasswordEncoder" p:characterEncoding="UTF-8">
 	  <constructor-arg index="0" value="MD5"/>
 	</bean>
