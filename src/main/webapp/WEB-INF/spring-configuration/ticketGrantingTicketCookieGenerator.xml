@@ -31,5 +31,6 @@
 		p:cookieSecure="false"
 		p:cookieMaxAge="-1"
 		p:cookieName="CASTGC"
-		p:cookiePath="" />
+		p:cookiePath="/" 
+		p:cookieDomain=".jasonsoso.com"/>
 </beans>
