@@ -33,7 +33,6 @@
                         <p>
                 <%
                 final String queryString = request.getQueryString() == null ? "" : request.getQueryString().replaceAll("&locale=([A-Za-z][A-Za-z]_)?[A-Za-z][A-Za-z]|^locale=([A-Za-z][A-Za-z]_)?[A-Za-z][A-Za-z]", "");
-                System.out.println("queryString:"+queryString);
                 %>
                     <c:set var='query' value='<%=queryString%>' />
                     <c:set var="xquery" value="${fn:escapeXml(query)}" />
