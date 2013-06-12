@@ -27,7 +27,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <spring:theme code="mobile.custom.css.file" var="mobileCss" text="" />
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh_CN">
 	<head>
 	    <title>CAS &#8211; Central Authentication Service</title>
         <c:if test="${not empty requestScope['isMobile'] and not empty mobileCss}">
@@ -48,6 +48,6 @@
         <div class="fl-screenNavigator-view">
             <div id="header" class="flc-screenNavigator-navbar fl-navbar fl-table">
 				<h1 id="company-name">JasonSoSo</h1>
-                <!-- <h1 id="app-name" class="fl-table-cell">Central Authentication Service (CAS)</h1> -->
+                <h1 id="app-name" class="fl-table-cell">JasonSoSo（杰森）  用户登录</h1>
             </div>		
             <div id="content" class="fl-screenNavigator-scroll-container">

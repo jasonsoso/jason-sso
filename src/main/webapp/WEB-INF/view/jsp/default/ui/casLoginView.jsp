@@ -72,21 +72,20 @@
             <div id="sidebar">
 				<div class="sidebar-content">
                     <!-- <p class="fl-panel fl-note fl-bevel-white fl-font-size-80"><spring:message code="screen.welcome.security" /></p> -->
-				</div>
-				
-				<c:choose>
+				    <c:choose>
                      <c:when test="${not empty requestScope['isMobile'] and not empty mobileCss}">
                         
                      </c:when>
                      <c:otherwise>
-                        <div class="container">
-		                    <div id="slides">
-		                      <img width="910px" height="500px" src="/images/example-slide-1.jpg" alt="" />
-		                    </div>
-		                  </div>
+                         <div class="container">
+                            <div id="slides">
+                              <img width="800px" height="470px" src="/images/example-slide-1.jpg" alt="" />
+                            </div>
+                          </div>
                      </c:otherwise>
                 </c:choose>
-				
+				    
+				</div>
 				
             </div>
 <jsp:directive.include file="includes/bottom.jsp" />
