@@ -79,7 +79,7 @@
                      <c:otherwise>
                          <div class="container">
                             <div id="slides">
-                              <img width="800px" height="470px" src="/images/example-slide-1.jpg" alt="" />
+                              <img width="800px" height="470px" src="<c:url value="/images/example-slide-1.jpg" />" alt="" />
                             </div>
                           </div>
                      </c:otherwise>
