@@ -130,9 +130,9 @@
 				<bean 
 					class="org.jasig.cas.authentication.handler.support.SimpleTestUsernamePasswordAuthenticationHandler" />
 				-->
-					<!-- jdbc 数据源进行用户认证 -->
+					<!-- jdbc 数据源进行用户认证  com.jason.sso.adaptors.jdbc.SearchModeSearchDatabaseAuthenticationHandler  org.jasig.cas.adaptors.jdbc.SearchModeSearchDatabaseAuthenticationHandler-->
 					<bean id="SearchModeSearchDatabaseAuthenticationHandler"
-						class="org.jasig.cas.adaptors.jdbc.SearchModeSearchDatabaseAuthenticationHandler"
+						class="com.jason.sso.adaptors.jdbc.SearchModeSearchDatabaseAuthenticationHandler"
 						abstract="false" lazy-init="default" autowire="default">
 						<property name="tableUsers">
 							<value>security_user</value>

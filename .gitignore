@@ -3,7 +3,7 @@
 .settings/
 target/
 .svn/
-classes/
 *.log
+*.log.*
 log/
 logs/
