@@ -167,13 +167,37 @@
 	Bean that defines the attributes that a service may return.  This example uses the Stub/Mock version.  A real implementation
 	may go against a database or LDAP server.  The id should remain "attributeRepository" though.
 	 -->
-	<bean id="attributeRepository"
+	<!-- <bean id="attributeRepository"
 		class="org.jasig.services.persondir.support.StubPersonAttributeDao">
 		<property name="backingMap">
 			<map>
 				<entry key="uid" value="uid" />
 				<entry key="eduPersonAffiliation" value="eduPersonAffiliation" /> 
 				<entry key="groupMembership" value="groupMembership" />
+			</map>
+		</property>
+	</bean> -->
+	<bean id="attributeRepository" class="org.jasig.services.persondir.support.jdbc.SingleRowJdbcPersonAttributeDao">
+		<constructor-arg index="0" ref="dataSource" />
+		<constructor-arg index="1">
+			<value>SELECT id,email,photo FROM security_user WHERE {0}</value>
+		</constructor-arg>
+		<!-- 组装sql用的查询条件属性 -->
+		<property name="queryAttributeMapping">
+			<map>
+				<entry key="username" value="username" />
+			</map>
+		</property>
+		<!-- 如果要组装多个查询条件，需要加上下面这个，默认为AND 
+		<property name="queryType">
+			<value>OR</value>
+		</property>-->
+		<!-- 要获取的属性在这里配置 -->
+		<property name="resultAttributeMapping">
+			<map>
+				<entry key="id" value="id" /> 
+				<entry key="email" value="email" />
+				<entry key="photo" value="photo" />
 			</map>
 		</property>
 	</bean>
@@ -194,6 +218,8 @@
                         <property name="description" value="Allows HTTP(S) and IMAP(S) protocols" />
                         <property name="serviceId" value="^(https?|imaps?)://.*" />
                         <property name="evaluationOrder" value="10000001" />
+                        <!--增加此项配置 允许多参数返回客户端 -->
+                        <property name="ignoreAttributes" value="true"/>
                     </bean>
                     <!--
                     Use the following definition instead of the above to further restrict access

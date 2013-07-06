@@ -2,7 +2,10 @@ package com.jason.sso.model;
 
 import java.io.Serializable;
 
-
+/**
+ * @author Jason
+ * @data 2013-6-27 下午11:24:46
+ */
 public class UserInfo  implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
