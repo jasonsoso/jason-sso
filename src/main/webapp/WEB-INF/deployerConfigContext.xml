@@ -265,7 +265,7 @@
 	  <constructor-arg index="0" value="MD5"/>
 	</bean>
     <!-- 数据库连接池 -->
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName">
 			<value>com.mysql.jdbc.Driver</value>
 		</property>
@@ -278,6 +278,13 @@
 		<property name="password">
 			<value>123456</value>
 		</property>
+		<property name="maxActive" value="100"/>
+        <property name="maxIdle" value="30"/>
+        <property name="maxWait" value="1000"/>
+        <property name="defaultAutoCommit" value="true"/>
+		<property name="validationQuery">  
+		    <value>select count(*) from security_user</value>  
+		</property>  
 	</bean>
 
 </beans>
