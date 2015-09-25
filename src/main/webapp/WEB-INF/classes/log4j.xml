@@ -101,8 +101,12 @@
         <level value="WARN" />
     </logger>
 
+	<!-- Application Loggers -->
+	<logger name="com.jason">
+		<level value="debug" />
+	</logger>
     <logger name="org.jasig" additivity="true">
-        <level value="INFO" />
+        <level value="debug" />
         <appender-ref ref="cas" />
     </logger>
 
