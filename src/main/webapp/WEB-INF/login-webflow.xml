@@ -28,7 +28,8 @@
     <on-start>
         <evaluate expression="initialFlowSetupAction" />
     </on-start>
-
+	
+	<!-- 检查flow中是否存在TGT如果存在，存在进入hasServiceCheck,为空进入gatewayRequestCheck -->
 	<decision-state id="ticketGrantingTicketExistsCheck">
 		<if test="flowScope.ticketGrantingTicketId != null" then="hasServiceCheck" else="gatewayRequestCheck" />
 	</decision-state>
@@ -37,10 +38,13 @@
 		<if test="requestParameters.gateway != '' and requestParameters.gateway != null and flowScope.service != null" then="gatewayServicesManagementCheck" else="serviceAuthorizationCheck" />
 	</decision-state>
 	
+	<!-- 存在TGT，说明用户已经登陆,
+	测试flow中service是否为空，不为空，进入renewRequestCheck，为空，进入viewGenericLoginSuccess -->
 	<decision-state id="hasServiceCheck">
 		<if test="flowScope.service != null" then="renewRequestCheck" else="viewGenericLoginSuccess" />
 	</decision-state>
 	
+	<!-- 检验 renew 参数是否存在-->
 	<decision-state id="renewRequestCheck">
 		<if test="requestParameters.renew != '' and requestParameters.renew != null" then="serviceAuthorizationCheck" else="generateServiceTicket" />
 	</decision-state>
@@ -111,11 +115,13 @@
 	<end-state id="casBadWorkstationView" view="casBadWorkstationView" />
 	<!-- LPPE transitions end here... -->
 	
+	<!-- 生成 LoginTicket 用于登录 -->
 	<action-state id="generateLoginTicket">
         <evaluate expression="generateLoginTicketAction.generate(flowRequestContext)" />
 		<transition on="generated" to="viewLoginForm" />
 	</action-state>
     
+    <!-- 登录视图 -->
 	<view-state id="viewLoginForm" view="casLoginView" model="credentials">
         <binder>
             <binding property="username" />
@@ -128,7 +134,8 @@
             <evaluate expression="authenticationViaFormAction.doBind(flowRequestContext, flowScope.credentials)" />
         </transition>
 	</view-state>
-
+	
+	<!-- 真正的提交用户信息进行登录 -->
   	<action-state id="realSubmit">
         <evaluate expression="authenticationViaFormAction.submit(flowRequestContext, flowScope.credentials, messageContext)" />
         <!--
@@ -157,11 +164,13 @@
         <evaluate expression="sendTicketGrantingTicketAction" />
 		<transition to="serviceCheck" />
 	</action-state>
-
+	
+	<!-- 检查service参数，如果service不空则generateServiceTicket，空则直接跳到SSO本系统的成功页面 -->
 	<decision-state id="serviceCheck">
 		<if test="flowScope.service != null" then="generateServiceTicket" else="viewGenericLoginSuccess" />
 	</decision-state>
 	
+	<!-- 生成 ServiceTicket -->
 	<action-state id="generateServiceTicket">
         <evaluate expression="generateServiceTicketAction" />
 		<transition on="success" to ="warn" />
@@ -174,6 +183,7 @@
         <transition on="success" to="redirect" />
     </action-state>
 
+	<!-- 重定向到第三方 把serviceTicketId带过去 -->
     <action-state id="redirect">
         <evaluate expression="flowScope.service.getResponse(requestScope.serviceTicketId)" result-type="org.jasig.cas.authentication.principal.Response" result="requestScope.response" />
         <transition to="postRedirectDecision" />
@@ -183,7 +193,7 @@
         <if test="requestScope.response.responseType.name() == 'POST'" then="postView" else="redirectView" />
     </decision-state>
 
-	<!-- 
+	<!-- 登录成功的成功页面，SSO系统本身的
 		the "viewGenericLogin" is the end state for when a user attempts to login without coming directly from a service.
 		They have only initialized their single-sign on session.
 	-->
