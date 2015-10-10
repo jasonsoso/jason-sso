@@ -165,6 +165,13 @@
       </list>
     </property>
   </bean>
+  <!-- 获取LT 登录前的票据 -->
+  <bean id="provideLoginTicketAction" class="com.jason.sso.web.ProvideLoginTicketAction" 
+        p:ticketIdGenerator-ref="loginTicketUniqueIdGenerator" />
+  <!-- 异步登录 -->
+  <bean id="ajaxLoginServiceTicketAction" class="com.jason.sso.web.AjaxLoginServiceTicketAction"
+        />
+  
   <bean id="proxyValidateController" class="org.jasig.cas.web.ServiceValidateController"
         p:centralAuthenticationService-ref="centralAuthenticationService"
         p:proxyHandler-ref="proxy20Handler"
@@ -216,7 +223,7 @@
         p:warnCookieGenerator-ref="warnCookieGenerator"
         p:ticketGrantingTicketCookieGenerator-ref="ticketGrantingTicketCookieGenerator"/>
 
-  <bean id="authenticationViaFormAction" class="org.jasig.cas.web.flow.AuthenticationViaFormAction"
+  <bean id="authenticationViaFormAction" class="com.jason.sso.web.AuthenticationViaFormAction"
         p:centralAuthenticationService-ref="centralAuthenticationService"
         p:warnCookieGenerator-ref="warnCookieGenerator"/>
 
