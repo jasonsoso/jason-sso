@@ -165,7 +165,8 @@
       </list>
     </property>
   </bean>
-  <!-- 获取LT 登录前的票据 -->
+  
+  <!-- 提供LT（登录前的票据） -->
   <bean id="provideLoginTicketAction" class="com.jason.sso.web.ProvideLoginTicketAction" 
         p:ticketIdGenerator-ref="loginTicketUniqueIdGenerator" />
   <!-- 异步登录 -->

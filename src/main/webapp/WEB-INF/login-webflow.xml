@@ -25,19 +25,17 @@
                           http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
     <var name="credentials" class="org.jasig.cas.authentication.principal.UsernamePasswordCredentials" />
-    
     <on-start>
         <evaluate expression="initialFlowSetupAction" />
     </on-start>
     
-    <!-- 添加如下配置 :-->
-    <!-- custom 请求的入口 -->
-    <action-state id="provideLoginTicket">
-       <evaluate expression="provideLoginTicketAction" />
-       <transition on="loginTicketRequested"  to="viewRedirectToRequestor"/>
-       <transition on="continue"  to="ticketGrantingTicketExistsCheck"/>
-    </action-state>
-    
+    <!-- 添加如下配置 :-->  
+    <action-state id="provideLoginTicket">  
+        <evaluate expression="provideLoginTicketAction"/>  
+        <transition on="loginTicketRequested" to ="viewRedirectToRequestor" />  
+        <transition on="continue" to="ticketGrantingTicketExistsCheck" />  
+    </action-state>  
+  
     <view-state id="viewRedirectToRequestor" view="casRedirectToRequestorView" model="credentials">  
         <var name="credentials" class="org.jasig.cas.authentication.principal.UsernamePasswordCredentials" />  
         <binder>  
@@ -51,11 +49,9 @@
             <set name="flowScope.credentials" value="credentials" />  
             <evaluate expression="authenticationViaFormAction.doBind(flowRequestContext, flowScope.credentials)" />  
         </transition>  
-    </view-state>
+    </view-state>  
     <!--添加结束处 -->
-       
-       
-       
+    
     <!-- 检查flow中是否存在TGT如果存在，存在进入hasServiceCheck,为空进入gatewayRequestCheck -->
     <decision-state id="ticketGrantingTicketExistsCheck">
         <if test="flowScope.ticketGrantingTicketId != null" then="hasServiceCheck" else="gatewayRequestCheck" />
@@ -68,7 +64,7 @@
     <!-- 存在TGT，说明用户已经登陆,
     测试flow中service是否为空，不为空，进入renewRequestCheck，为空，进入viewGenericLoginSuccess -->
     <decision-state id="hasServiceCheck">
-        <if test="flowScope.service neq null" then="renewRequestCheck" else="viewGenericLoginSuccess" />
+        <if test="flowScope.service != null" then="renewRequestCheck" else="viewGenericLoginSuccess" />
     </decision-state>
     
     <!-- 检验 renew 参数是否存在-->
@@ -178,17 +174,19 @@
           <transition on="success" to="passwordPolicyCheck" />
         -->
         <transition on="success" to="sendTicketGrantingTicket" />
-        <!--将 to="viewLoginForm" 修改为 to="loginResponse" -->                 
-        <transition on="error" to="loginResponse" />  
-        <!-- <transition on="error" to="generateLoginTicket" /> -->
+        
+        <!--将 to="generateLoginTicket" 修改为 to="loginResponse" -->
+        <transition on="error" to="loginResponse" />
+        
+        <!--加入该transition , 当验证失败之后重新获取login ticket -->  
+        <transition on="errorForRemoteRequestor" to="viewRedirectToRequestor" />  
+        
         <transition on="accountDisabled" to="casAccountDisabledView" />
         <transition on="mustChangePassword" to="casMustChangePassView" />
         <transition on="accountLocked" to="casAccountLockedView" />
         <transition on="badHours" to="casBadHoursView" />
         <transition on="badWorkstation" to="casBadWorkstationView" />
         <transition on="passwordExpired" to="casExpiredPassView" />
-        <!--加入该transition , 当验证失败之后重新获取login ticket -->  
-        <transition on="errorForRemoteRequestor" to="viewRedirectToRequestor" />
     </action-state>
     
     <action-state id="sendTicketGrantingTicket">
@@ -202,16 +200,23 @@
     </decision-state>
     
     <!-- 生成 ServiceTicket -->
-    <action-state id="generateServiceTicket">
+    <!-- <action-state id="generateServiceTicket">
         <evaluate expression="generateServiceTicketAction" />
-        <!--当生成 ST 成功后，则进入登录成功页，新增 loginResponse Action 处理项，判断是否是 ajax/iframe 登录 -->  
-        <!-- <transition on="success" to ="warn" /> -->
-        <transition on="success" to="loginResponse" />
-        
-        <!-- 可能生成 service ticket 失败，同样，也是进入 loginResponse -->  
-        <transition on="error" to="loginResponse" />
-        <!-- <transition on="error" to="generateLoginTicket" /> -->
+        <transition on="success" to ="warn" />
+        <transition on="error" to="generateLoginTicket" />
         <transition on="gateway" to="gatewayServicesManagementCheck" />
+    </action-state> -->
+    
+    <!--当执行到该 action 的时候，表示已经登录成功，将生成 ST(Service Ticket)。-->    
+    <action-state id="generateServiceTicket">  
+        <evaluate expression="generateServiceTicketAction" />  
+        <!--当生成 ST 成功后，则进入登录成功页，新增 loginResponse Action 处理项，判断是否是 ajax/iframe 登录 -->  
+        <!-- <transition on="success" to="warn" /> -->  
+        <transition on="success" to="loginResponse" />  
+        <!--<transition on="error" to="viewLoginForm" />-->  
+        <!-- 可能生成 service ticket 失败，同样，也是进入 loginResponse -->  
+        <transition on="error" to="loginResponse" />  
+        <transition on="gateway" to="redirect" />  
     </action-state>
     
     <action-state id="loginResponse">  
@@ -221,7 +226,7 @@
         <transition on="error" to="viewLoginForm" />  
         <!-- 反之，则进入 viewAjaxLoginView 页面 -->  
         <transition on="local" to="viewAjaxLoginView" />  
-    </action-state>  
+    </action-state>
 
     <action-state id="gatewayServicesManagementCheck">
         <evaluate expression="gatewayServicesManagementCheck" />
@@ -267,7 +272,6 @@
     
     <end-state id="viewServiceSsoErrorView" view="viewServiceSsoErrorView" />
 
-    <!-- ajax 登录视图 -->
     <end-state id="viewAjaxLoginView" view="viewAjaxLoginView" />
     
     <global-transitions>
