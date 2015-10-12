@@ -24,8 +24,7 @@ public class ProvideLoginTicketAction extends AbstractAction{
 	@Override  
     protected Event doExecute(RequestContext context) throws Exception {   
         final HttpServletRequest request = WebUtils.getHttpServletRequest(context);   
-  
-        Event event = context.getCurrentEvent();  
+        //Event event = context.getCurrentEvent();  
         
         if (request.getParameter("get-lt") != null && request.getParameter("get-lt").equalsIgnoreCase("true")) {   
         	 final String loginTicket = this.ticketIdGenerator.getNewTicketId(PREFIX);
