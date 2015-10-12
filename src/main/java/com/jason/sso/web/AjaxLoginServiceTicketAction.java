@@ -51,4 +51,4 @@ public final class AjaxLoginServiceTicketAction extends AbstractAction {
           
         return new Event(this, "local"); // 转入 ajaxLogin.jsp 页面  
     }  
-}  
+}
